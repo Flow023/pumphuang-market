@@ -577,13 +577,13 @@ function checkout() {
         <h2>💳 ชำระเงิน</h2>
         ${currentUser && currentUser.role === "customer" ? `<div class="card"><h3>ข้อมูลสมาชิก</h3><p>ชื่อ: ${escapeHTML(currentUser.name || '-')}</p><p>เบอร์โทร: ${escapeHTML(currentUser.phone || '-')}</p><p style="color:#27ae60;font-weight:bold;margin-top:5px;">⭐ แต้มสะสมคงเหลือ: ${userPoints} แต้ม</p></div>` : `<div class="card guest-checkout-note"><h3>🛍️ สั่งซื้อแบบไม่สมัครสมาชิก</h3><p>กรอกชื่อและเบอร์โทรสำหรับติดต่อได้เลย ไม่จำเป็นต้องสร้างบัญชี</p><div class="form-group"><label for="guestName">ชื่อผู้รับสินค้า *</label><input id="guestName" type="text" maxlength="80" placeholder="ชื่อ-นามสกุล"></div><div class="form-group"><label for="guestPhone">เบอร์โทรศัพท์ *</label><input id="guestPhone" type="tel" maxlength="20" placeholder="08XXXXXXXX"></div></div>`}
 
-        // ${currentUser && currentUser.role === "customer" && userPoints > 0 ? `
-        //     // <div class="form-group" style="background: #f0fdf4; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
-        //     //     <label style="color: #166534; font-weight: bold;">🎁 ใช้แต้มสะสมแลกส่วนลด (1 แต้ม = 1 บาท)</label>
-        //     //     <input type="number" id="usePointsInput" min="0" max="${Math.min(userPoints, subtotal)}" value="0" oninput="calculateDiscount(${subtotal},${userPoints})" placeholder="กรอกจำนวนแต้มที่ต้องการใช้">
-        //     //     <small style="color: #15803d; display: block; margin-top: 4px;">แต้มสะสมที่จะได้รับจากออเดอร์นี้: +${Math.floor(subtotal / 100)} แต้ม</small>
-        //     // </div>
-        // ` : ''}
+        ${currentUser && currentUser.role === "customer" && userPoints > 0 ? `
+            <div class="form-group" style="background: #f0fdf4; padding: 12px; border-radius: 8px; border: 1px solid #bbf7d0;">
+                <label style="color: #166534; font-weight: bold;">🎁 ใช้แต้มสะสมแลกส่วนลด (1 แต้ม = 1 บาท)</label>
+                <input type="number" id="usePointsInput" min="0" max="${Math.min(userPoints, subtotal)}" value="0" oninput="calculateDiscount(${subtotal},${userPoints})" placeholder="กรอกจำนวนแต้มที่ต้องการใช้">
+                <small style="color: #15803d; display: block; margin-top: 4px;">แต้มสะสมที่จะได้รับจากออเดอร์นี้: +${Math.floor(subtotal / 100)} แต้ม</small>
+            </div>
+        ` : ''}
 
         <div class="form-group">
             <label>ที่อยู่จัดส่ง</label>
@@ -735,11 +735,11 @@ function rejectPayment(orderId) {
 
     if (!confirm(`ต้องการปฏิเสธสลิปการโอนเงินของออเดอร์ #${orderId} ใช่หรือไม่?`)) return;
 
-    // คืนแต้มให้ลูกค้าถ้าออเดอร์นั้นมีการใช้แต้มส่วนลด
-    // if (order.discount && order.discount > 0) {
-    //     let customer = users.find(u => u.id == order.customerId);
-    //     if (customer) {
-    //         customer.points = (customer.points || 0) + order.discount;
+    คืนแต้มให้ลูกค้าถ้าออเดอร์นั้นมีการใช้แต้มส่วนลด
+    if (order.discount && order.discount > 0) {
+        let customer = users.find(u => u.id == order.customerId);
+        if (customer) {
+            customer.points = (customer.points || 0) + order.discount;
             
             // อัปเดต currentUser หากผู้ใช้ที่ล็อกอินอยู่คือลูกค้ารายนี้
             if (currentUser && currentUser.id == customer.id) {
